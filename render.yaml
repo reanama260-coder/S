@@ -1,8 +1,0 @@
-services:
-  - type: web
-    name: stremio-hentai-hub
-    runtime: node
-    plan: free
-    buildCommand: npm install
-    startCommand: npm start
-    healthCheckPath: /manifest.json
