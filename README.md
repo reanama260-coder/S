@@ -1,22 +1,24 @@
-# Stremio Hentai Hub v2.5.7
+# Stremio Hentai Hub v2.5.13
 
-Stable v2.5.4-wide base with the Hanime.red catalog and a site-specific stream resolver. The Iwara Community provider has been removed completely. Existing provider catalogs, genre lists, and display rules are retained; Hanime.red cards always use `poster` shape, including in the mixed `All Providers` catalog.
+Based on the previous working provider set. Existing provider IDs, manifest catalog IDs, genre options, and poster rules are preserved. Iwara remains removed.
 
-## Providers
+## Changes in 2.5.13
 
-- HentaiMama
-- Hentaigasm
-- HentaiSmile
-- HentaiCity
-- Hanime.red · Studio HD
+- The combined `Hentai Hub - All Providers` listing removes duplicate titles appearing on multiple providers. Individual provider catalogs are unchanged.
+- Hanime.red streams are resolved fresh for every stream request; signed stream responses are not cached.
+- Hanime.red player API calls now send the player-page Referer, Origin, and browser-style JSON Accept header.
+- Hanime.red HLS master URLs are passed through unchanged instead of being rewritten to child playlists, preserving signature query parameters.
+- The package, runtime log, and served manifest versions are synchronized at 2.5.13.
+- No new dependencies, headless browser, or extra catalog IDs beyond the existing Hanime.red provider.
 
 ## Deploy
 
-1. Put `index.js`, `package.json`, `test.js`, `README.md`, and `render.yaml` directly in the repository root.
+1. Put `index.js`, `package.json`, `test.js`, `README.md`, and `render.yaml` in the repository root.
 2. Install dependencies with `npm install`.
 3. Start with `npm start`.
-4. Install the public HTTPS URL ending in `/manifest.json` in Stremio.
+4. Use the public HTTPS address ending in `/manifest.json` in Stremio.
 
-Hanime.red stream resolution follows the primary page player to its `nhplayer.com` player endpoint, solves its challenge, and uses the endpoint's returned media URL. It does not guess stream URLs or recursively scrape recommended-video iframes. Requests have timeouts, and proof-of-work yields between batches so it does not monopolize the event loop.
+Run `npm test` after installing dependencies. Playback against the live provider must be verified in the deployed environment; this test container has no outbound DNS/network access.
 
-Run `npm test` for unit tests. The server uses the existing Axios/Cheerio/crypto stack; no browser process or new package is required.
+
+Hanime.red stream resolver update (v2.5.13): adds the expected player-page Referer and Origin to its URL API request, keeps signed HLS URLs unchanged, and synchronizes all version metadata. No provider or catalog changes.
