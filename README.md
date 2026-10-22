@@ -1,24 +1,28 @@
-# Stremio Hentai Hub v2.5.13
+# Stremio Hentai Hub
 
-Based on the previous working provider set. Existing provider IDs, manifest catalog IDs, genre options, and poster rules are preserved. Iwara remains removed.
+Stremio addon based on the v2.5.5 project supplied in this conversation. This build removes the Iwara and Hanime.red catalogs and adds HStream.moe. HStream implementation is embedded in `index.js`; there is no separate provider `.js` file.
 
-## Changes in 2.5.13
+## Providers
 
-- The combined `Hentai Hub - All Providers` listing removes duplicate titles appearing on multiple providers. Individual provider catalogs are unchanged.
-- Hanime.red streams are resolved fresh for every stream request; signed stream responses are not cached.
-- Hanime.red player API calls now send the player-page Referer, Origin, and browser-style JSON Accept header.
-- Hanime.red HLS master URLs are passed through unchanged instead of being rewritten to child playlists, preserving signature query parameters.
-- The package, runtime log, and served manifest versions are synchronized at 2.5.13.
-- No new dependencies, headless browser, or extra catalog IDs beyond the existing Hanime.red provider.
+- HentaiMama
+- Hentaigasm
+- HentaiSmile
+- HentaiCity
+- HStream.moe
+
+HStream's catalog and stream pages require JavaScript rendering, so this build uses `puppeteer-core` with `@sparticuz/chromium`. The browser is launched only when HStream is requested, and is closed after each operation. Other provider requests do not need the browser.
 
 ## Deploy
 
-1. Put `index.js`, `package.json`, `test.js`, `README.md`, and `render.yaml` in the repository root.
+1. Put `index.js`, `package.json`, `test.js`, `README.md`, and `render.yaml` directly in the repository root.
 2. Install dependencies with `npm install`.
 3. Start with `npm start`.
-4. Use the public HTTPS address ending in `/manifest.json` in Stremio.
+4. Install the public HTTPS URL ending in `/manifest.json` in Stremio.
 
-Run `npm test` after installing dependencies. Playback against the live provider must be verified in the deployed environment; this test container has no outbound DNS/network access.
+## Tests
 
+Run `npm test`.
 
-Hanime.red stream resolver update (v2.5.13): adds the expected player-page Referer and Origin to its URL API request, keeps signed HLS URLs unchanged, and synchronizes all version metadata. No provider or catalog changes.
+## Optional environment variables
+
+`PORT`, `USER_AGENT`, `HTTP_TIMEOUT_MS`, `CACHE_CATALOG_SECONDS`, `CACHE_DETAIL_SECONDS`, `CACHE_STREAM_SECONDS`, `EMBED_DEPTH`, `EMBED_PAGE_LIMIT`, `HENTAIMAMA_BASE`, `HENTAIGASM_BASE`, `HENTAISMILE_BASE`, `HENTAICITY_BASE`, .
